@@ -4,50 +4,47 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float dashDistance = 1f; // The distance the player will dash
-    public float dashTime = 0.2f; // The duration of the dash animation
-    public KeyCode dashKey = KeyCode.Mouse1; // The key used to trigger the dash
+    [SerializeField] private float dashDistance = 5f; // distance to dash
+    [SerializeField] private float dashSpeed = 10f; // speed of dash
+    [SerializeField] private float dashCoolDown = 2f;
 
-    private Vector3 dashDirection = Vector3.zero; // The direction the player will dash in
-    private bool isDashing = false; // Whether or not the player is currently dashing
+    private bool canDash = true;
+    private Vector3 dashDirection;
 
-    void Update()
+    private void Update()
     {
-        // Get the direction from the player to the mouse cursor
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = transform.position.z; // Make sure the z-coordinate is the same as the player's
-        Vector3 direction = (mousePosition - transform.position).normalized;
-
-        // Check if the player has clicked the dash key and isn't already dashing
-        if (Input.GetKeyDown(dashKey) && !isDashing)
+        if (Input.GetMouseButtonDown(1) && canDash)
         {
-            // Set the dash direction to the opposite of the cursor direction
-            dashDirection = -direction;
+            // get the direction towards the mouse cursor
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dashDirection = transform.position - mousePosition;
+            dashDirection.z = 0f;
+            dashDirection.Normalize();
 
-            // Start the dash animation coroutine
-            StartCoroutine(DashAnimation());
+            // start dashing
+            canDash = false;
+            StartCoroutine(Dash());
+            StartCoroutine(DashCooldown());
         }
     }
 
-    IEnumerator DashAnimation()
+    private IEnumerator DashCooldown()
     {
-        isDashing = true; // Set the dashing flag
+        yield return new WaitForSeconds(dashCoolDown);
+        canDash = true;
+    }
+    private IEnumerator Dash()
+    {
+        float distanceTraveled = 0f;
 
-        // Calculate the destination position for the dash
-        Vector3 destination = transform.position + dashDirection * dashDistance;
-
-        // Move the player to the destination position over the duration of the dash animation
-        float elapsedTime = 0f;
-        while (elapsedTime < dashTime)
+        while (distanceTraveled < dashDistance)
         {
-            transform.position = Vector3.Lerp(transform.position, destination, elapsedTime / dashTime);
-            elapsedTime += Time.deltaTime;
+            float distanceThisFrame = dashSpeed * Time.deltaTime;
+            transform.position += dashDirection * distanceThisFrame;
+            distanceTraveled += distanceThisFrame;
+
             yield return null;
         }
-
-        // Reset the player's position and dashing flag
-        transform.position = destination;
-        isDashing = false;
     }
 }
 
