@@ -7,6 +7,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemyPrefab;
     public Transform[] spawnPoints;
     public Transform player;
+
     public float spawnDelay = 2f;
     public float enemySpeed = 3f;
 

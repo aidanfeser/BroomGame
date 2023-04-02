@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashSpeed = 10f; // speed of dash
     [SerializeField] private float dashCoolDown = 2f;
 
+    public TrailRenderer tr;
     private bool canDash = true;
     private Vector3 dashDirection;
 
@@ -42,8 +43,9 @@ public class PlayerMovement : MonoBehaviour
             float distanceThisFrame = dashSpeed * Time.deltaTime;
             transform.position += dashDirection * distanceThisFrame;
             distanceTraveled += distanceThisFrame;
-
+            tr.emitting = true;
             yield return null;
+            tr.emitting = false;
         }
     }
 }

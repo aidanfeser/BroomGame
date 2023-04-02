@@ -17,7 +17,14 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) ;
+        if (collision.gameObject.tag == "Player")
+        {
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null) 
+            {
+                playerHealth.TakeDamage(damage); 
+            }
+        }
     }
 
     public void TakeDamage(int damage)
