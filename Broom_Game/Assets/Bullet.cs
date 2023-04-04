@@ -32,7 +32,10 @@ public class Bullet : MonoBehaviour
             StartCoroutine(CooldownTimer());
             Destroy(gameObject);
         }
-
+        else if (collision.CompareTag("EnemyBullet"))
+        {
+            Destroy(gameObject);
+        }
     }
 
    IEnumerator CooldownTimer()

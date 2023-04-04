@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8591754950760028971}
   m_Layer: 0
   m_Name: Circle 1
-  m_TagString: Enemy
+  m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,4 +138,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyTime: 3
   damage: 10
-  cooldown: 0.5
+  cooldown: 1
