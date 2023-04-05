@@ -10,18 +10,37 @@ public class ShootingEnemyBasic : MonoBehaviour
     public GameObject bulletPrefab;     
     public Transform bulletSpawnPoint;  
     
-    private bool canShoot = true;   
+    private bool canShoot = true;
 
-   
-    
+    public GameObject enemySpawner;
+    public GameObject enemyPrefab;
+
+    public float bulletSpeed = 10f;
+    public float newShootingDelay = 0.5f;
+
     void Update()
     {
-        
         float distanceToPlayer = Vector3.Distance(transform.position, playerTarget.transform.position);
 
-       
         if (distanceToPlayer <= shootingRange && canShoot)
         {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, shootingRange);
+            bool hasEnemiesInRange = false;
+
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.gameObject.CompareTag("Enemy"))
+                {
+                    hasEnemiesInRange = true;
+                    break;
+                }
+            }
+
+            if (!hasEnemiesInRange)
+            {
+                Instantiate(enemyPrefab, transform.position, Quaternion.identity, enemySpawner.transform);
+            }
+
             StartCoroutine(Shoot());
         }
     }
@@ -30,15 +49,12 @@ public class ShootingEnemyBasic : MonoBehaviour
     {
         canShoot = false;
 
-       
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
-        
         Vector3 direction = (playerTarget.transform.position - transform.position).normalized;
-        bullet.GetComponent<Rigidbody2D>().velocity = direction * 7f;
+        bullet.GetComponent<Rigidbody2D>().velocity = direction * bulletSpeed;
 
-        
-        yield return new WaitForSeconds(shootingDelay);
+        yield return new WaitForSeconds(newShootingDelay);
 
         canShoot = true;
     }

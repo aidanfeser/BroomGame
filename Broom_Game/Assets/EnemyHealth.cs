@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class EnemyHealth : MonoBehaviour
 
     public int damage = 10;
 
+    ScoreManager scoreManager;
+
     void Start()
     {
         currentHealth = startingHealth;
+        scoreManager = FindObjectOfType<ScoreManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -42,5 +46,6 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
+        scoreManager.AddKill();
     }
 }
