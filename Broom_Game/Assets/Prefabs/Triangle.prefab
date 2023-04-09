@@ -153,6 +153,7 @@ MonoBehaviour:
   startingHealth: 100
   currentHealth: 0
   damage: 10
+  dropPrefab: {fileID: 4084906554498321778, guid: 66261b73f53bd2b4ea6f9a53f389508b, type: 3}
 --- !u!114 &687866526408955150
 MonoBehaviour:
   m_ObjectHideFlags: 0

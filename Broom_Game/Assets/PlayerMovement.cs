@@ -12,7 +12,28 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private Vector3 dashDirection;
 
+    public GameObject Panal;
+   
+    public int currentExp = 0;
+    public int maxExp;
+
+    public bool Level1;
+    public bool Level2 = false;
+    public bool Level3 = false;
+    // int exp = player.currentExp;
+
+
+    BasicShooting shootingScript;
+
+    void Start()
+    {
+        maxExp = 10;
+        Level1 = true;
+
+        shootingScript = GetComponent<BasicShooting>();
+    }
     private void Update()
+
     {
         if (Input.GetMouseButtonDown(1) && canDash)
         {
@@ -27,8 +48,55 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
             StartCoroutine(DashCooldown());
         }
+
+        if(currentExp == maxExp)
+        {
+            
+            LevelUp();
+        }
+
+        
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Drop"))
+        {
+            // Check if the other collider is the circle collider
+            CircleCollider2D circleCollider = other.GetComponentInChildren<CircleCollider2D>();
+            if (circleCollider != null)
+            {
+                currentExp += 1;
+
+                Destroy(other.gameObject);
+            }
+        }
+    }
+    void LevelUp()
+    {
+        Panal.SetActive(true);
+        currentExp = 0;
+
+        if(Level1 == true)
+        {
+            Level1 = false;
+            Level2 = true;
+            
+            Time.timeScale = 0f;
+
+            shootingScript.canShoot = false;
+
+            maxExp = 50;
+
+            PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.currentHealth = playerHealth.startHealth;
+            }
+
+
+        }
+    }
     private IEnumerator DashCooldown()
     {
         yield return new WaitForSeconds(dashCoolDown);

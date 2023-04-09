@@ -20,6 +20,8 @@ public class ShootingEnemyBasic : MonoBehaviour
 
     void Update()
     {
+        playerTarget = GameObject.FindGameObjectWithTag("Player");
+
         float distanceToPlayer = Vector3.Distance(transform.position, playerTarget.transform.position);
 
         if (distanceToPlayer <= shootingRange && canShoot)

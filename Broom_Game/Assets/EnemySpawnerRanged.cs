@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemySpawnerRanged : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public float minSpawnDelay = 1f;
-    public float maxSpawnDelay = 5f;
+    public float minSpawnDelay = 5f;
+    public float maxSpawnDelay = 10f;
     public float spawnRange = 10f;
     public float speed = 3f;
 
@@ -19,11 +19,12 @@ public class EnemySpawnerRanged : MonoBehaviour
 
     private bool canSpawn = true;
 
-   
+    PlayerMovement playerScript;
 
     void Start()
     {
         StartCoroutine(SpawnEnemies());
+        playerScript = FindObjectOfType<PlayerMovement>();
     }
 
 
@@ -58,6 +59,12 @@ public class EnemySpawnerRanged : MonoBehaviour
             enemyControllerScript.target = playerTrans;
             enemyControllerScript.speed = speed;
         }
+        if (playerScript.Level2 == true)
+        {
+            maxSpawnDelay = 5f;
+            minSpawnDelay = 3f;
+        }
+
     }
 }
 

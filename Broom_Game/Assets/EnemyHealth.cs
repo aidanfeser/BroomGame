@@ -11,6 +11,8 @@ public class EnemyHealth : MonoBehaviour
 
     public int damage = 10;
 
+    public GameObject dropPrefab;
+
     ScoreManager scoreManager;
 
     void Start()
@@ -45,7 +47,10 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        Instantiate(dropPrefab, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
         scoreManager.AddKill();
+
     }
 }
